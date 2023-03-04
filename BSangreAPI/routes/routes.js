@@ -3,9 +3,12 @@ module.exports = (app) => {
     // const publicacion = require("../controllers/publicacion.controller.js");
     // const comentario = require("../controllers/comentario.controller");
     const usuario = require("../controllers/usuario.controller");
+    const publicacion = require("../controllers/publicacion.controller");
     var router = require("express").Router();
 
     router.post("/loginUser", usuario.postLogin);
+
+    router.get("/publiacion/listar", publicacion.findAll);
 
     // router.post("/persona", persona.create);
     // router.get("/persona", persona.list);
