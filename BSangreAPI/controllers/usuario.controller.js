@@ -31,6 +31,21 @@ exports.create = (req, res) => {
   });
 };
 
+const Sangre = require("../models/sangre.model");
+
+exports.list = (req, res)=>{
+    Usuario.getAll((err, data)=>{
+        if(err)
+            res.status(500).send({
+                message: err.message || "Error al recuperar los datos",
+            });
+        else{
+            console.log(`Usuario.list $(data)`);
+            res.status(200).json(data);
+        }
+    });
+};
+
 exports.postLogin = async (req, res) => {
   const { email, password } = req.body;
   const userId = await Usuario.getUserByEmailAndPassword(email, password);

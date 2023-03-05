@@ -62,7 +62,7 @@ Usuario.create = (usuario, result) => {
 };
 
 Usuario.getAll = (result) => {
-  let query = "SELECT * FROM Usuario";
+  let query = 'SELECT * FROM "Usuario"';
 
   sql.query(query, (err, res) => {
     if (err) {
@@ -137,3 +137,5 @@ Usuario.getUserByEmailAndPassword = async (email, password) => {
     return null;
   }
 };
+
+module.exports = Usuario;

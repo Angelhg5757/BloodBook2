@@ -1,43 +1,41 @@
 // const { DataTypes } = require('sequelize');
 // const sequelize = require('../models/db');
 
-module.exports = (sequelize, Sequelize) => {
-  const Publicacion = sequelize.define("publicaciones", {
-      idPublicaciones: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      fechaPublicacion: {
-        type: Sequelize.DATEONLY,
-        primaryKey: true,
-        allowNull: false
-      },
-      titulo: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      descripcion: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      isActive: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true
-      },
-      idImagen: {
-        type: Sequelize.INTEGER,
-        allowNull: true
-      },
-      idUsuario: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      }
-  });
+// module.exports = (sequelize, Sequelize) => {
+//   const Publicaciones = sequelize.define("Publicaciones", {
+//       // idPublicaciones: {
+//       //   type: Sequelize.INTEGER,
+//       //   primaryKey: true,
+//       //   autoIncrement: true
+//       // },
+//       fechaPublicacion: {
+//         type: Sequelize.DATEONLY,
+//         primaryKey: true,
+//         allowNull: false
+//       },
+//       titulo: {
+//         type: Sequelize.STRING,
+//         allowNull: false
+//       },
+//       descripcion: {
+//         type: Sequelize.STRING,
+//         allowNull: false
+//       },
+//       isActive: {
+//         type: Sequelize.BOOLEAN,
+//         allowNull: false,
+//         defaultValue: true
+//       },
+//       idImagen: {
+//         type: Sequelize.INTEGER,
+//       },
+//       idUsuario: {
+//         type: Sequelize.INTEGER,
+//       }
+//   });
 
-  return  Publicacion;
-};
+//   return Publicaciones;
+// };
 
 // module.exports = (sequelize, Sequelize) => {
 //   const Publicacion = sequelize.define("Publicaciones", {
@@ -77,17 +75,34 @@ module.exports = (sequelize, Sequelize) => {
 // };
 
 
+const sql = require("./db.js");
+//constructor
+const Publicacion = function (publicacion) {
+  this.idPublicaciones = publicacion.idPublicaciones;
+  this.fechaPublicacion = publicacion.fechaPublicacion;
+  this.titulo = publicacion.titulo;
+  this.descripcion = publicacion.descripcion;
+  this.isActive = publicacion.isActive;
+  this.idImagen = publicacion.idImagen;
+  this.idUsuario = publicacion.idUsuario;
+};
 
-// //constructor
-// const Publicacion = function (publicacion) {
-//   this.idPublicaciones = publicacion.idPublicaciones;
-//   this.fechaPublicacion = publicacion.fechaPublicacion;
-//   this.titulo = publicacion.titulo;
-//   this.descripcion = publicacion.descripcion;
-//   this.isActive = publicacion.isActive;
-//   this.idImagen = publicacion.idImagen;
-//   this.idUsuario = publicacion.idUsuario;
-// };
+Publicacion.getAll = (result) => {
+  let query = 'SELECT * FROM "Publicaciones"';
+
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(err, null);
+      return;
+    }
+
+    console.log("publicacion: ", res);
+    result(null, res);
+  });
+};
+
+module.exports = Publicacion;
 
 // Publicacion.create = (publicacion, result) => {
 //   sql.query(
@@ -135,20 +150,7 @@ module.exports = (sequelize, Sequelize) => {
 //   );
 // };
 
-// Publicacion.getAll = (result) => {
-//   let query = "SELECT * FROM Publicaciones";
 
-//   sql.query(query, (err, res) => {
-//     if (err) {
-//       console.log("Error: ", err);
-//       result(err, null);
-//       return;
-//     }
-
-//     console.log("publicacion: ", res);
-//     result(null, res);
-//   });
-// };
 
 // Publicacion.getById = (req, result) => {
 //   const id = req.params.id;
