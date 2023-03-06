@@ -86,7 +86,7 @@ const Publicacion = function (publicacion) {
   this.idImagen = publicacion.idImagen;
   this.idUsuario = publicacion.idUsuario;
 };
-
+//Listar Publicaciones
 Publicacion.getAll = (result) => {
   let query = 'SELECT * FROM "Publicaciones"';
 
@@ -101,7 +101,48 @@ Publicacion.getAll = (result) => {
     result(null, res);
   });
 };
-
+//Crear Publicaciones
+Publicacion.create = (publicacion, result) => {
+  const query = 'INSERT INTO "Publicaciones" ("fechaPublicacion", "titulo", "descripcion","isActive","idImagen","idUsuario") VALUES ($1, $2, $3, $4,$5,$6)';
+  const values = [publicacion.fechaPublicacion, publicacion.titulo, publicacion.descripcion,publicacion.isActive, publicacion.idImagen, publicacion.idUsuario];
+  sql.query(query, values, (err, res) => {
+    if(err) {
+      console.log("Error al crear publicación: ", err);
+      result(err, null);
+      return;
+    }
+    console.log("Publicacion creada con éxito: ", res);
+    result(null, res);
+  });
+};
+//Eliminar Publicaciones
+Publicacion.delete = (publicacion, result) => {
+  const query = 'DELETE FROM "Publicaciones" WHERE "idPublicaciones" = $1';
+  const values = [publicacion.idPublicaciones];
+  sql.query(query, values, (err, res) => {
+    if(err) {
+      console.log("Error al eliminar publicación: ", err);
+      result(err, null);
+      return;
+    }
+    console.log("Publicación eliminada con éxito: ", res);
+    result(null, res);
+  });
+};
+//Actualizar Publicaciones
+Publicacion.update = (publicacion, result) => {
+  const query = 'UPDATE "Publicaciones" SET "fechaPublicacion" = $1, "titulo" = $2, "descripcion" = $3, "isActive" = $4, "idImagen" = $5, "idUsuario" = $6 WHERE "idPublicaciones" = $7';
+  const values = [publicacion.fechaPublicacion, publicacion.titulo, publicacion.descripcion, publicacion.isActive, publicacion.idImagen, publicacion.idUsuario];
+  sql.query(query, values, (err, res) => {
+    if (err){
+      console.log("Error al actualizar publicación: ", err);
+      result(err, null);
+      return;
+    }
+    console.log("Publicación actualizada con éxito: ", res);
+    result(null, res);
+  });
+};
 module.exports = Publicacion;
 
 // Publicacion.create = (publicacion, result) => {

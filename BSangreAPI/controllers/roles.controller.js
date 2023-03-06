@@ -1,5 +1,5 @@
 const Roles = require("../models/roles.model");
-
+//listar
 exports.list = (req, res)=>{
     Roles.getAll((err, data)=>{
         if(err)

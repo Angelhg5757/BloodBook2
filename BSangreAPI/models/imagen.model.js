@@ -1,10 +1,10 @@
 const sql = require("./db.js");
-
+//Constructor
 const Imagen = function (imagen) {
   this.idImagen = imagen.id;
   this.urlImagen = imagen.urlImagen;
 };
-
+//Listar imagenes
 Imagen.getAll = (result) => {
   let query = 'SELECT * FROM "Imagen"';
 
@@ -19,6 +19,49 @@ Imagen.getAll = (result) => {
     result(null, res);
   });
 };
+//Crear imagen
+Imagen.create = (imagen, result) => {
+  const query = 'INSERT INTO "Imagen" ("urlImagen") VALUES ($1)';
+  const values = [imagen.urlImagen];
+  sql.query(query, values, (err, res) => {
+    if(err){
+      console.log("Error al crear imagen: ", err);
+      result(err, null);
+      return;
+    }
+    console.log("Imagen creada: ", res);
+    result(null, res);
+  });
+};
+//Eliminar imagen
+Imagen.delete = (imagen, result) => {
+  const query = 'DELETE FROM "Imagen" WHERE "idImagen" = $1';
+  const values = [imagen.idImagen];
+  sql.query(query, values, (err, res) => {
+    if(err){
+      console.log("Error al eliminar imagen: ", err);
+      result(err, null);
+      return;
+    }
+    console.log("Imagen eliminada: ", res);
+    result(null, res);
+  });
+};
+//Actualizar imagen
+Imagen.update = (imagen, result) => {
+  const query = 'UPDATE "Imagen" SET "urlImagen" = $1 WHERE "idImagen" = $2';
+  const values = [imagen.urlImagen, imagen.idImagen];
+  sql.query(query, values, (err, res) => {
+    if(err){
+      console.log("Error al actualizar imagen: ", err);
+      result(err, null);
+      return;
+    }
+    console.log("Imagen actualizada: ", res);
+    result(null, res);
+  });
+};
+
 
 module.exports = Imagen;
 

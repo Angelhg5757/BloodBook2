@@ -14,7 +14,7 @@ const Usuario = function (usuario) {
   this.idSangre = usuario.idSangre;
   this.sexo = usuario.sexo;
 };
-
+//Crear
 Usuario.create = (usuario, result) => {
   sql.query("SELECT id FROM Usuario ORDER BY id DESC LIMIT 1", (err, res) => {
     if (err) {
@@ -60,7 +60,7 @@ Usuario.create = (usuario, result) => {
     );
   });
 };
-
+//Obtener
 Usuario.getAll = (result) => {
   let query = 'SELECT * FROM "Usuario"';
 
@@ -75,7 +75,7 @@ Usuario.getAll = (result) => {
     result(null, res);
   });
 };
-
+//Obtener por id
 Usuario.getById = (req, result) => {
   const id = req.params.id;
 
@@ -89,7 +89,7 @@ Usuario.getById = (req, result) => {
     result(null, res);
   });
 };
-
+//Actualizar
 Usuario.update = (req, result) => {
   const id = parseInt(req.params.id);
   const { nombre, email, url_avatar } = req.body;
@@ -108,7 +108,7 @@ Usuario.update = (req, result) => {
     }
   );
 };
-
+//Eliminar
 Usuario.delete = (req, result) => {
   const id = req.params.id;
 
@@ -121,7 +121,7 @@ Usuario.delete = (req, result) => {
     result(null, res);
   });
 };
-
+//Obtener usuario por correo y password
 Usuario.getUserByEmailAndPassword = async (email, password) => {
   const query =
     "SELECT id FROM Usuarios WHERE correo = $1 AND password = crypt($2, password)";

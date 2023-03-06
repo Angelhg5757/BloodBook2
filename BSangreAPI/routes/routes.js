@@ -12,17 +12,47 @@ module.exports = (app) => {
     
     router.post("/loginUser", usuario.postLogin);
 
+    //Rutas de usuario
     router.get("/usuario/listar", usuario.list);
+    router.post("/usuario/crear", usuario.crear);
+    router.put("/usuario/actualizar", usuario.actualizar);
+    router.delete("/usuario/eliminar", usuario.eliminar);
 
+    //Rutas de publicacion
     router.get("/publicacion/listar", publicacion.list);
-    
-    router.get("/imagen/listar", imagen.list);
+    router.post("/publicacion/crear", publicacion.crear);
+    router.put("/publicacion/actualizar", publicacion.actualizar);
+    router.delete("/publicacion/eliminar", publicacion.eliminar);
 
+    //Rutas de imagen
+    router.get("/imagen/listar", imagen.list);
+    router.post("/imagen/crear", imagen.crear);
+    router.put("/imagen/actualizar", imagen.actualizar);
+    router.delete("/imagen/eliminar", imagen.eliminar);
+
+    //Rutas de sangre
     router.get("/sangre/listar", sangre.list);
 
+    //Rutas de roles
     router.get("/roles/listar", roles.list);
-
+    
+    //Rutas de Foto de perfil
     router.get("/foto/listar", foto.list);
+    router.post("/foto/crear", foto.crear);
+    router.put("/foto/actualizar", foto.actualizar);
+    router.delete("/foto/eliminar", foto.eliminar);
+
+    //Rutas de perfil
+    router.get("/perfil/listar", usuario.listar);
+    router.post("/perfil/crear", usuario.crear);
+    router.put("/perfil/actualizar", usuario.actualizar);
+    router.delete("/perfil/eliminar", usuario.eliminar);
+
+    //Rutas de redes
+    router.get("/redes/listar", usuario.listar);
+    router.post("/redes/crear", usuario.crear);
+    router.put("/redes/actualizar", usuario.actualizar);
+    router.delete("/redes/eliminar", usuario.eliminar);
 
     // router.post("/persona", persona.create);
     // router.get("/persona", persona.list);

@@ -1,5 +1,5 @@
 const Imagen = require("../models/imagen.model");
-
+//Listar imagenes
 exports.list = (req, res)=>{
     Imagen.getAll((err, data)=>{
         if(err)
@@ -12,6 +12,40 @@ exports.list = (req, res)=>{
         }
     });
 };
+//Crear imagen
+exports.crear = (req, res)=>{
+    Imagen.create(req,(err, data)=>{
+        if(err)
+        res.status(500).send({
+            message: err.message || "Error al crear la imagen"
+        });
+        else
+            res.status(200).json(data);
+    });
+};
+//Eliminar imagen
+exports.eliminar = (req, res)=>{
+    Imagen.delete(req,(err, data)=>{
+        if(err)
+        res.status(500).send({
+            message: err.message || "Error al eliminar la imagen"
+        });
+        else 
+            res.status(200).json(data);
+    });
+};
+//Actualizar imagen
+exports.actualizar = (req, res)=>{
+    Imagen.update(req,(err, data)=>{
+        if(err)
+        res.status(500).send({
+            message: err.message || "Error al actualizar la imagen"
+        });
+        else 
+        res.status(200).json(data);
+    });
+};
+
 
 // const db = require("../models/db");
 // const Imagen = db.Imagen;

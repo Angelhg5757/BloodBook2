@@ -55,3 +55,29 @@ exports.postLogin = async (req, res) => {
     res.json({ success: false });
   }
 };
+
+exports.actualizar = (req, res) => {
+  Usuario.update(req,newUsuario, (err, data) => {
+    if (err) {
+      res.status(500).json({
+        message: err.message || "Error al actualizar el Usuario."
+    });
+  } else {
+    res.status(200).json(data);
+  }
+});
+};
+
+exports.borrar = (req, res) => {
+  Usuario.delete(req, (err, data) => {
+    if (err){
+      res.status(500).json({
+        message: err.message || "Error al borrar el Usuario."
+      });
+    } else {
+      res.status(200).json(data);
+    }
+  });
+};
+
+    
