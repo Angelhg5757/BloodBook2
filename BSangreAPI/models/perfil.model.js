@@ -9,7 +9,7 @@ const Perfil = function(perfil){
 }
 //Crear
 Perfil.create = function(perfil, result){
-    const text = 'INSERT INTO "perfil" ("userTag", "idFoto", "idUsuario") VALUES ($1, $2, $3)';
+    const text = 'INSERT INTO "Perfil" ("userTag", "idFoto", "idUsuario") VALUES ($1, $2, $3)';
     const values = [perfil.userTag, perfil.idFoto, perfil.idUsuario];
     sql.query(text, values, function(err, res){
         if (err){

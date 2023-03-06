@@ -38,18 +38,32 @@ exports.list = (req, res) => {
     });
 };
 //Crear
-exports.crear = (req, res) => {
-    Publicacion.create(req, (err, data) => {
-        if (err)
-        res.status(500).send({
-            message: err.message || "Error al crear la publicacion"
-        });
-        else {
-            console.log(`Publicacion.crear $(data)`);
-            res.status(200).json(data);
-        }  
+exports.create = (req, res) => {
+    if (!req.body) {
+      res.status(404).send({
+        message: "No puede estar vacia la peticion",
+      });
+    }
+  
+    
+    const newPublicacion = new Publicacion({
+      idPublicaciones: req.body.idPublicaciones,
+      fechaPublicacion: req.body.fechaPublicacion,
+      titulo: req.body.titulo,
+      descripcion: req.body.descripcion,
+      isActive: req.body.isActive,
+      idImagen: req.body.idImagen,
+      idUsuario: req.body.idUsuario,
     });
-};
+  
+    Publicacion.create(newPublicacion, (err, data) => {
+      if (err)
+        res.status(500).json({
+          message: err.message || "Error al crear una Publicacion.",
+        });
+      else res.status(200).json(data);
+    });
+  };
 //Actualizar 
 exports.actualizar = (req, res) => {
     Publicacion.update(req, (err, data) => {

@@ -1,13 +1,13 @@
-const FotoPerfil = require("../models/fotoPerfil.model");
+const Contacto = require("../models/contacto.model");
 //listar
-exports.list = (req, res) => {
-  FotoPerfil.getAll((err, data) => {
+exports.listar = (req, res) => {
+  Contacto.getAll((err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || "Error al recuperar los datos",
       });
     else {
-      console.log(`FotoPerfil.list $(data)`);
+      console.log(`Contacto.list $(data)`);
       res.status(200).json(data);
     }
   });
@@ -20,16 +20,17 @@ exports.create = (req, res) => {
     });
   }
 
-  //Crear persona
-  const newFoto = new FotoPerfil({
-    id: req.body.id,
-    urlFoto: req.body.urlFoto,
+  const newContacto = new Contacto({
+    idContacto: req.body.idContacto,
+    telefono: req.body.telefono,
+    correoPublico: req.body.correoPublico,
+    idUsuario: req.body.idUsuario,
   });
 
-  FotoPerfil.create(newFoto, (err, data) => {
+  Contacto.create(newContacto, (err, data) => {
     if (err)
       res.status(500).json({
-        message: err.message || "Error al crear una Foto.",
+        message: err.message || "Error al crear.",
       });
     else res.status(200).json(data);
   });
@@ -37,20 +38,21 @@ exports.create = (req, res) => {
 
 //eliminar
 exports.eliminar = (req, res) => {
-  FotoPerfil.delete(req, (err, data) => {
+  Contacto.delete(req, (err, data) => {
     if (err)
       res.status(500).json({
-        message: err.message || "Error al eliminar la foto :C",
+        message: err.message || "Error al eliminar :C",
       });
     else res.json(data);
   });
 };
+
 //Actualizar
 exports.actualizar = (req, res) => {
-  FotoPerfil.update(req, (err, data) => {
+  Contacto.update(req, (err, data) => {
     if (err)
       res.status(500).json({
-        message: err.message || "Error al actualizar la foto :C",
+        message: err.message || "Error al actualizar :C",
       });
     else res.json(data);
   });

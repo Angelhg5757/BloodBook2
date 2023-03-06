@@ -7,28 +7,31 @@ module.exports = (app) => {
     const imagen = require("../controllers/imagen.controller");
     const sangre = require("../controllers/sangre.controller");
     const roles = require("../controllers/roles.controller");
+    const perfil = require("../controllers/perfil.controller");
+    const redes = require("../controllers/redes.controller");
     const foto = require("../controllers/fotoPerfil.controller");
+    const contacto = require("../controllers/contacto.controller");
     var router = require("express").Router();
     
-    router.post("/loginUser", usuario.postLogin);
+    //router.post("/loginUser", usuario.postLogin);
 
     //Rutas de usuario
     router.get("/usuario/listar", usuario.list);
-    router.post("/usuario/crear", usuario.crear);
-    router.put("/usuario/actualizar", usuario.actualizar);
-    router.delete("/usuario/eliminar", usuario.eliminar);
+    router.post("/usuario/crear", usuario.create);
+    router.put("/usuario/actualizar/:id", usuario.actualizar);
+    router.delete("/usuario/eliminar/:id", usuario.borrar);
 
     //Rutas de publicacion
     router.get("/publicacion/listar", publicacion.list);
-    router.post("/publicacion/crear", publicacion.crear);
-    router.put("/publicacion/actualizar", publicacion.actualizar);
-    router.delete("/publicacion/eliminar", publicacion.eliminar);
+    router.post("/publicacion/crear", publicacion.create);
+    router.put("/publicacion/actualizar/:id", publicacion.actualizar);
+    router.delete("/publicacion/eliminar/:id", publicacion.eliminar);
 
     //Rutas de imagen
     router.get("/imagen/listar", imagen.list);
-    router.post("/imagen/crear", imagen.crear);
-    router.put("/imagen/actualizar", imagen.actualizar);
-    router.delete("/imagen/eliminar", imagen.eliminar);
+    router.post("/imagen/crear", imagen.create);
+    router.put("/imagen/actualizar/:id", imagen.actualizar);
+    router.delete("/imagen/eliminar/:id", imagen.eliminar);
 
     //Rutas de sangre
     router.get("/sangre/listar", sangre.list);
@@ -38,27 +41,25 @@ module.exports = (app) => {
     
     //Rutas de Foto de perfil
     router.get("/foto/listar", foto.list);
-    router.post("/foto/crear", foto.crear);
-    router.put("/foto/actualizar", foto.actualizar);
-    router.delete("/foto/eliminar", foto.eliminar);
+    router.post("/foto/crear", foto.create);
+    router.put("/foto/actualizar/:id", foto.actualizar);
+    router.delete("/foto/eliminar/:id", foto.eliminar);
 
     //Rutas de perfil
-    router.get("/perfil/listar", usuario.listar);
-    router.post("/perfil/crear", usuario.crear);
-    router.put("/perfil/actualizar", usuario.actualizar);
-    router.delete("/perfil/eliminar", usuario.eliminar);
+    router.get("/perfil/listar", perfil.listar);
+    router.post("/perfil/crear", perfil.create);
+    router.put("/perfil/actualizar/:id", perfil.actualizar);
+    router.delete("/perfil/eliminar/:id", perfil.borrar);
 
     //Rutas de redes
-    router.get("/redes/listar", usuario.listar);
-    router.post("/redes/crear", usuario.crear);
-    router.put("/redes/actualizar", usuario.actualizar);
-    router.delete("/redes/eliminar", usuario.eliminar);
+    router.get("/redes/listar", redes.listar);
+    router.post("/redes/crear", redes.create);
+    router.put("/redes/actualizar/:id", redes.actualizar);
+    router.delete("/redes/eliminar/:id", redes.borrar);
 
-    // router.post("/persona", persona.create);
-    // router.get("/persona", persona.list);
-    // router.get("/persona/:id", persona.listID);
-    // router.put("/persona/:id", persona.actualiza);
-    // router.delete("/persona/:id", persona.borrar);
+    router.get("/contacto/listar", contacto.listar);
+    router.post("/contacto/crear", contacto.create);
+    router.delete("/contacto/eliminar/:idContacto", contacto.eliminar);
 
     // router.post("/persona/validar", persona.valida);
     // router.get("/todo", persona.todo);

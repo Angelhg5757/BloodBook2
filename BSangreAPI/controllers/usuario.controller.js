@@ -9,7 +9,7 @@ exports.create = (req, res) => {
 
   //Crear persona
   const newUsuario = new Usuario({
-    id: req.body.id,
+    idUsuario: req.body.idUsuario,
     nombre: req.body.nombre,
     apePat: req.body.apePat,
     apeMat: req.body.apeMat,
@@ -31,7 +31,6 @@ exports.create = (req, res) => {
   });
 };
 
-const Sangre = require("../models/sangre.model");
 
 exports.list = (req, res)=>{
     Usuario.getAll((err, data)=>{
@@ -57,7 +56,7 @@ exports.postLogin = async (req, res) => {
 };
 
 exports.actualizar = (req, res) => {
-  Usuario.update(req,newUsuario, (err, data) => {
+  Usuario.update(req, (err, data) => {
     if (err) {
       res.status(500).json({
         message: err.message || "Error al actualizar el Usuario."
