@@ -15,54 +15,54 @@ const Usuario = function (usuario) {
   this.sexo = usuario.sexo;
 };
 //Crear
-Usuario.create = (usuario, result) => {
-  sql.query(
-    'SELECT "idUsuario" FROM "Usuario" ORDER BY "idUsuario" DESC LIMIT 1',
-    (err, res) => {
-      if (err) {
-        throw err;
-      }
+// Usuario.create = (usuario, result) => {
+//   sql.query(
+//     'SELECT "idUsuario" FROM "Usuario" ORDER BY "idUsuario" DESC LIMIT 1',
+//     (err, res) => {
+//       if (err) {
+//         throw err;
+//       }
 
-      const ultimoId = res.rows[0].id;
-      const nuevoId = ultimoId + 1;
+//       const ultimoId = res.rows[0].id;
+//       const nuevoId = ultimoId + 1;
 
-      const hashedPassword = bcrypt.hashSync(usuario.password, 10);
-      const active = true;
+//       const hashedPassword = bcrypt.hashSync(usuario.password, 10);
+//       const active = true;
 
-      sql.query(
-        'INSERT INTO "Usuario" ("idUsuario", "nombre", "apePat", "apeMat", "correo", "password", "fechaNac", \
-        "isActive", "idRoles", "idSangre", "sexo") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
-        [
-          nuevoId,
-          usuario.nombre,
-          usuario.apePat,
-          usuario.apeMat,
-          usuario.correo,
-          hashedPassword,
-          usuario.fechaNac,
-          active,
-          usuario.idRoles,
-          usuario.idSangre,
-          usuario.sexo,
-        ],
-        (err, res) => {
-          if (err) {
-            throw err;
-          }
-          console.log("Row created usuario: ", {
-            id: result.insertId,
-            ...usuario,
-          });
-          console.log("Row created usuario: ", {
-            id: result.insertId,
-            ...usuario,
-          });
-          result(null, { id: result.insertId, ...usuario });
-        }
-      );
-    }
-  );
-};
+//       sql.query(
+//         'INSERT INTO "Usuario" ("idUsuario", "nombre", "apePat", "apeMat", "correo", "password", "fechaNac", \
+//         "isActive", "idRoles", "idSangre", "sexo") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
+//         [
+//           nuevoId,
+//           usuario.nombre,
+//           usuario.apePat,
+//           usuario.apeMat,
+//           usuario.correo,
+//           hashedPassword,
+//           usuario.fechaNac,
+//           active,
+//           usuario.idRoles,
+//           usuario.idSangre,
+//           usuario.sexo,
+//         ],
+//         (err, res) => {
+//           if (err) {
+//             throw err;
+//           }
+//           console.log("Row created usuario: ", {
+//             id: result.insertId,
+//             ...usuario,
+//           });
+//           console.log("Row created usuario: ", {
+//             id: result.insertId,
+//             ...usuario,
+//           });
+//           result(null, { id: result.insertId, ...usuario });
+//         }
+//       );
+//     }
+//   );
+// };
 
 Usuario.create = (usuario, result) => {
   const text =
@@ -142,6 +142,45 @@ Usuario.update = (req, result) => {
     }
   );
 };
+
+Usuario.updateStatus = (req, result) => {
+  const id = parseInt(req.params.id);
+  const estado = false;
+
+  sql.query(
+    'UPDATE "Usuario" SET "isActive" = $1 WHERE "idUsuario" = $2',
+    [estado, id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+      console.log("Usuario: ", res);
+      result(null, res);
+    }
+  );
+};
+//Actualizar conforme al periodo de donación
+// Usuario.updateStatus2 = (req, result) => {
+//   const id = parseInt(req.params.id);
+//   const estado = true;
+
+//   sql.query(
+//     'UPDATE "Usuario" SET "isActive" = $1 WHERE "idUsuario" = $2',
+//     [estado, id],
+//     (err, res) => {
+//       if (err) {
+//         console.log("Error: ", err);
+//         result(err, null);
+//         return;
+//       }
+//       console.log("Usuario: ", res);
+//       result(null, res);
+//     }
+//   );
+// };
+
 //Eliminar
 Usuario.delete = (req, result) => {
   const id = req.params.id;

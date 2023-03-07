@@ -34,19 +34,19 @@ Imagen.create = (imagen, result) => {
   });
 };
 //Eliminar imagen
-Imagen.delete = (imagen, result) => {
-  const query = 'DELETE FROM "Imagen" WHERE "idImagen" = $1';
-  const values = [imagen.idImagen];
-  sql.query(query, values, (err, res) => {
-    if(err){
-      console.log("Error al eliminar imagen: ", err);
+Imagen.delete = (req, result) => {
+  const id = parseInt(req.params.id);
+
+  sql.query('DELETE FROM "Imagen" WHERE "idImagen" = $1', [id], (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
       result(err, null);
       return;
     }
-    console.log("Imagen eliminada: ", res);
     result(null, res);
   });
 };
+
 //Actualizar imagen
 Imagen.update = (imagen, result) => {
   const query = 'UPDATE "Imagen" SET "urlImagen" = $1 WHERE "idImagen" = $2';

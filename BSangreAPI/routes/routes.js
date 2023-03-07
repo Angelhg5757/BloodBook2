@@ -5,10 +5,11 @@ module.exports = (app) => {
     const usuario = require("../controllers/usuario.controller");
     const publicacion = require("../controllers/publicacion.controller");
     const imagen = require("../controllers/imagen.controller");
+    const redes = require("../controllers/redes.controller");
     const sangre = require("../controllers/sangre.controller");
     const roles = require("../controllers/roles.controller");
     const perfil = require("../controllers/perfil.controller");
-    const redes = require("../controllers/redes.controller");
+    const redesHU = require("../controllers/redesHU.controller");
     const foto = require("../controllers/fotoPerfil.controller");
     const contacto = require("../controllers/contacto.controller");
     var router = require("express").Router();
@@ -18,13 +19,13 @@ module.exports = (app) => {
     //Rutas de usuario
     router.get("/usuario/listar", usuario.list);
     router.post("/usuario/crear", usuario.create);
-    router.put("/usuario/actualizar/:id", usuario.actualizar);
+    router.put("/usuario/actualizarStatus/:id", usuario.actualizarStatus);
     router.delete("/usuario/eliminar/:id", usuario.borrar);
 
     //Rutas de publicacion
     router.get("/publicacion/listar", publicacion.list);
     router.post("/publicacion/crear", publicacion.create);
-    router.put("/publicacion/actualizar/:id", publicacion.actualizar);
+    router.put("/publicacion/actualizar/:id", publicacion.actualizarStatus);
     router.delete("/publicacion/eliminar/:id", publicacion.eliminar);
 
     //Rutas de imagen
@@ -38,6 +39,9 @@ module.exports = (app) => {
 
     //Rutas de roles
     router.get("/roles/listar", roles.list);
+
+    //Rutas de redes
+    router.get("/redes/listar", redes.list);
     
     //Rutas de Foto de perfil
     router.get("/foto/listar", foto.list);
@@ -49,16 +53,17 @@ module.exports = (app) => {
     router.get("/perfil/listar", perfil.listar);
     router.post("/perfil/crear", perfil.create);
     router.put("/perfil/actualizar/:id", perfil.actualizar);
-    router.delete("/perfil/eliminar/:id", perfil.borrar);
+    router.delete("/perfil/eliminar/:id", perfil.eliminar);
 
-    //Rutas de redes
-    router.get("/redes/listar", redes.listar);
-    router.post("/redes/crear", redes.create);
-    router.put("/redes/actualizar/:id", redes.actualizar);
-    router.delete("/redes/eliminar/:id", redes.borrar);
+    //Rutas de redes_has_usuario
+    router.get("/redesH/listar", redesHU.listar);
+    router.post("/redesH/crear", redesHU.create);
+    router.put("/redesH/actualizar/:id", redesHU.actualizar);
+    router.delete("/redesH/eliminar/:id", redesHU.borrar);
 
     router.get("/contacto/listar", contacto.listar);
     router.post("/contacto/crear", contacto.create);
+    router.put("/contacto/actualizar/:id", contacto.actualizar);
     router.delete("/contacto/eliminar/:idContacto", contacto.eliminar);
 
     // router.post("/persona/validar", persona.valida);

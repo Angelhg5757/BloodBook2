@@ -53,20 +53,24 @@ Contacto.delete = (req, result) => {
   });
 };
 //Actualizar 
-Contacto.update = (contacto, result) => {
-  const text = 'UPDATE "Contacto" SET "telefono" = $1, "correoPublico" = $2, "idUsuario" = $3 WHERE "idContacto" = $4';
-  const values = [contacto.telefono, contacto.correoPublico, contacto.idUsuario, contacto.idContacto];
-  sql.query(text, values, (err, res) => {
-    if (err){
-      console.log("Error al actualizar el contacto: ", err);
-      result(err, null);
-      return;
-    }
-    console.log ("Contacto actualizado!", res);
-    result(null, res);
-  });
-};
+Contacto.update = (req, result) => {
+  const id = parseInt(req.params.id);
+  const { telefono, correoPublico, idUsuario } = req.body;
 
+  sql.query(
+    'UPDATE "Contacto" SET "telefono" = $1, "correoPublico" = $2, "idUsuario" = $3 WHERE "idContacto" = $4',
+    [telefono, correoPublico, idUsuario, id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+      console.log("Usuario: ", res);
+      result(null, res);
+    }
+  );
+};
 
 
 module.exports = Contacto;

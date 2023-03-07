@@ -36,16 +36,15 @@ FotoPerfil.create = (fotoPerfil, result) => {
   });
 };
 //Eliminar foto de perfil
-FotoPerfil.delete = (fotoPerfil, result) => {
-  const text = 'DELETE FROM "FotoPerfil" WHERE "idFoto" = $1';
-  const values = [fotoPerfil.idFoto];
-  sql.query(text, values, (err, res) => {
-    if (err){
-      console.log("Error al eliminar foto de perfil: ", err);
+FotoPerfil.delete = (req, result) => {
+  const id = parseInt(req.params.id);
+
+  sql.query('DELETE FROM "FotoPerfil" WHERE "idFoto" = $1', [id], (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
       result(err, null);
       return;
     }
-    console.log ("Comentario eliminado!", res);
     result(null, res);
   });
 };

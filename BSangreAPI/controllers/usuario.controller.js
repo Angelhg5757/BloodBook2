@@ -67,6 +67,30 @@ exports.actualizar = (req, res) => {
 });
 };
 
+exports.actualizarStatus = (req, res) => {
+  Usuario.updateStatus(req, (err, data) => {
+    if (err) {
+      res.status(500).json({
+        message: err.message || "Error al actualizar el Usuario."
+    });
+  } else {
+    res.status(200).json(data);
+  }
+});
+};
+
+// exports.actualizarStatus2 = (req, res) => {
+//   Usuario.updateStatus2(req, (err, data) => {
+//     if (err) {
+//       res.status(500).json({
+//         message: err.message || "Error al actualizar el Usuario."
+//     });
+//   } else {
+//     res.status(200).json(data);
+//   }
+// });
+// };
+
 exports.borrar = (req, res) => {
   Usuario.delete(req, (err, data) => {
     if (err){

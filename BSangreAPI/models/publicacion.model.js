@@ -103,8 +103,11 @@ Publicacion.getAll = (result) => {
 };
 //Crear Publicaciones
 Publicacion.create = (publicacion, result) => {
+  const fecha = new Date();
+  const estado = true;
+
   const query = 'INSERT INTO "Publicaciones" ("fechaPublicacion", "titulo", "descripcion","isActive","idImagen","idUsuario") VALUES ($1, $2, $3, $4,$5,$6)';
-  const values = [publicacion.fechaPublicacion, publicacion.titulo, publicacion.descripcion,publicacion.isActive, publicacion.idImagen, publicacion.idUsuario];
+  const values = [fecha, publicacion.titulo, publicacion.descripcion, estado, publicacion.idImagen, publicacion.idUsuario];
   sql.query(query, values, (err, res) => {
     if(err) {
       console.log("Error al crear publicación: ", err);
@@ -116,23 +119,25 @@ Publicacion.create = (publicacion, result) => {
   });
 };
 //Eliminar Publicaciones
-Publicacion.delete = (publicacion, result) => {
-  const query = 'DELETE FROM "Publicaciones" WHERE "idPublicaciones" = $1';
-  const values = [publicacion.idPublicaciones];
-  sql.query(query, values, (err, res) => {
-    if(err) {
-      console.log("Error al eliminar publicación: ", err);
+Publicacion.delete = (req, result) => {
+  const id = parseInt(req.params.id);
+
+  sql.query('DELETE FROM "Publicaciones" WHERE "idPublicaciones" = $1', [id], (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
       result(err, null);
       return;
     }
-    console.log("Publicación eliminada con éxito: ", res);
     result(null, res);
   });
 };
-//Actualizar Publicaciones
-Publicacion.update = (publicacion, result) => {
-  const query = 'UPDATE "Publicaciones" SET "fechaPublicacion" = $1, "titulo" = $2, "descripcion" = $3, "isActive" = $4, "idImagen" = $5, "idUsuario" = $6 WHERE "idPublicaciones" = $7';
-  const values = [publicacion.fechaPublicacion, publicacion.titulo, publicacion.descripcion, publicacion.isActive, publicacion.idImagen, publicacion.idUsuario];
+// Update status publicacion
+Publicacion.updateStatus = (req, result) => {
+  const id = parseInt(req.params.id);
+  const active = false;
+
+  const query = 'UPDATE "Publicaciones" SET "isActive" = $1 WHERE "idPublicaciones" = $2';
+  const values = [active, id];
   sql.query(query, values, (err, res) => {
     if (err){
       console.log("Error al actualizar publicación: ", err);
@@ -143,6 +148,22 @@ Publicacion.update = (publicacion, result) => {
     result(null, res);
   });
 };
+
+//Actualizar Publicaciones
+// Publicacion.update = (publicacion, result) => {
+//   const query = 'UPDATE "Publicaciones" SET "fechaPublicacion" = $1, "titulo" = $2, "descripcion" = $3, "isActive" = $4, "idImagen" = $5, "idUsuario" = $6 WHERE "idPublicaciones" = $7';
+//   const values = [publicacion.fechaPublicacion, publicacion.titulo, publicacion.descripcion, publicacion.isActive, publicacion.idImagen, publicacion.idUsuario];
+//   sql.query(query, values, (err, res) => {
+//     if (err){
+//       console.log("Error al actualizar publicación: ", err);
+//       result(err, null);
+//       return;
+//     }
+//     console.log("Publicación actualizada con éxito: ", res);
+//     result(null, res);
+//   });
+// };
+
 module.exports = Publicacion;
 
 // Publicacion.create = (publicacion, result) => {
@@ -207,34 +228,3 @@ module.exports = Publicacion;
 //   });
 // };
 
-// // Publicacion.update = (req, result) => {
-// //   const id = parseInt(req.params.id);
-// //   const { titulo, contenido, fecha_creacion, id_persona } = req.body;
-
-// //   sql.query(
-// //     "UPDATE publicacion SET titulo = $1, contenido = $2, fecha_creacion = $3, id_persona = $4 WHERE id = $5",
-// //     [titulo, contenido, fecha_creacion, id_persona, id],
-// //     (err, res) => {
-// //       if (err) {
-// //         console.log("Error: ", err);
-// //         result(err, null);
-// //         return;
-// //       }
-// //       console.log("publicacion: ", res);
-// //       result(null, res);
-// //     }
-// //   );
-// // };
-
-// Publicacion.delete = (req, result) => {
-//   const id = req.params.id;
-
-//   sql.query("DELETE FROM Publicaciones WHERE id = $1", [id], (err, res) => {
-//     if (err) {
-//       console.log("Error: ", err);
-//       result(err, null);
-//       return;
-//     }
-//     result(null, res);
-//   });
-// };

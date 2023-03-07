@@ -1,17 +1,17 @@
 const Perfil = require('../models/perfil.model');
 //listar
 exports.listar = (req, res) => {
-    Perfil.getAll((err, perfil) => {
-        if (err) {
-            res.status(500).send({
-                message: err.message || "Error al listar perfil"
-            });
-        }else{
-            console.log(perfil);
-            res.status(200).send(data);
-        }
+    Perfil.getAll((err, data) => {
+      if (err)
+        res.status(500).send({
+          message: err.message || "Error al recuperar los datos",
+        });
+      else {
+        console.log(`Perfil.list $(data)`);
+        res.status(200).json(data);
+      }
     });
-};
+  };
 //Crear
 exports.create = (req, res) => {
     if (!req.body) {
@@ -49,15 +49,12 @@ exports.actualizar = (req, res) => {
     });
 };
 //Borrar
-exports.borrar = (req, res) => {
-    Perfil.delete(req, (err, perfil) => {
-        if(err){
-            res.status(500).send({
-                message: err.message || "Error al borrar perfil"
-            })
-        }else{
-            console.log(perfil);
-            res.status(200).send(data);
-        }
-    });
+exports.eliminar = (req, res) => {
+  Perfil.delete(req, (err, data) => {
+    if (err)
+      res.status(500).json({
+        message: err.message || "Error al eliminar :C",
+      });
+    else res.json(data);
+  });
 };
