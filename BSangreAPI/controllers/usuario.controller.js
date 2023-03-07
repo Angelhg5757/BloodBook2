@@ -45,15 +45,15 @@ exports.list = (req, res)=>{
     });
 };
 
-exports.postLogin = async (req, res) => {
-  const { email, password } = req.body;
-  const userId = await Usuario.getUserByEmailAndPassword(email, password);
-  if (userId) {
-    res.json({ success: true, userId });
-  } else {
-    res.json({ success: false });
-  }
-};
+// exports.postLogin = async (req, res) => {
+//   const { email, password } = req.body;
+//   const userId = await Usuario.getUserByEmailAndPassword(email, password);
+//   if (userId) {
+//     res.json({ success: true, userId });
+//   } else {
+//     res.json({ success: false });
+//   }
+// };
 
 exports.actualizar = (req, res) => {
   Usuario.update(req, (err, data) => {

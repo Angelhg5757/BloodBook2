@@ -2,7 +2,7 @@ const sql = require("./db.js");
 
 //Constructor
 const Contacto = function (contacto) {
-  //this.idContacto = Contacto.idContacto;
+  this.idContacto = Contacto.idContacto;
   this.telefono = contacto.telefono;
   this.correoPublico = contacto.correoPublico;
   this.idUsuario = contacto.idUsuario;
@@ -41,9 +41,9 @@ Contacto.getAll = (result) => {
 
 //Eliminar 
 Contacto.delete = (req, result) => {
-  const id = parseInt(req.params.id);
+  const id = req.params.idContacto;
 
-  sql.query('DELETE FROM "Contacto" WHERE "Contacto.idContacto" = $1', [id], (err, res) => {
+  sql.query('DELETE FROM "Contacto" WHERE "idContacto" = $1', [id], (err, res) => {
     if (err) {
       console.log("Error: ", err);
       result(err, null);

@@ -15,55 +15,6 @@ const Usuario = function (usuario) {
   this.sexo = usuario.sexo;
 };
 //Crear
-// Usuario.create = (usuario, result) => {
-//   sql.query(
-//     'SELECT "idUsuario" FROM "Usuario" ORDER BY "idUsuario" DESC LIMIT 1',
-//     (err, res) => {
-//       if (err) {
-//         throw err;
-//       }
-
-//       const ultimoId = res.rows[0].id;
-//       const nuevoId = ultimoId + 1;
-
-//       const hashedPassword = bcrypt.hashSync(usuario.password, 10);
-//       const active = true;
-
-//       sql.query(
-//         'INSERT INTO "Usuario" ("idUsuario", "nombre", "apePat", "apeMat", "correo", "password", "fechaNac", \
-//         "isActive", "idRoles", "idSangre", "sexo") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
-//         [
-//           nuevoId,
-//           usuario.nombre,
-//           usuario.apePat,
-//           usuario.apeMat,
-//           usuario.correo,
-//           hashedPassword,
-//           usuario.fechaNac,
-//           active,
-//           usuario.idRoles,
-//           usuario.idSangre,
-//           usuario.sexo,
-//         ],
-//         (err, res) => {
-//           if (err) {
-//             throw err;
-//           }
-//           console.log("Row created usuario: ", {
-//             id: result.insertId,
-//             ...usuario,
-//           });
-//           console.log("Row created usuario: ", {
-//             id: result.insertId,
-//             ...usuario,
-//           });
-//           result(null, { id: result.insertId, ...usuario });
-//         }
-//       );
-//     }
-//   );
-// };
-
 Usuario.create = (usuario, result) => {
   const text =
     'INSERT INTO "Usuario" ("nombre", "apePat", "apeMat", "correo", "password", "fechaNac", \
@@ -195,9 +146,11 @@ Usuario.delete = (req, result) => {
   });
 };
 //Obtener usuario por correo y password
-// Usuario.getUserByEmailAndPassword = async (email, password) => {
+// Usuario.getUserByEmailAndPassword = async (req, result) => {
+//   const email = req.body.correo;
+//   const password = req.body.password;
 //   const query =
-//     'SELECT id FROM "Usuarios" WHERE correo = $1 AND password = crypt($2, password)';
+//     'SELECT "idUsuarios" FROM "Usuarios" WHERE "correo" = $1 AND "password" = crypt($2, "password")';
 //   const values = [email, password];
 //   try {
 //     const result = await sql.query(query, values);
