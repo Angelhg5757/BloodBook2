@@ -88,7 +88,7 @@ const Publicacion = function (publicacion) {
 };
 //Listar Publicaciones
 Publicacion.getAll = (result) => {
-  let query = 'SELECT * FROM "Publicaciones"';
+  let query = 'SELECT * FROM "Publicaciones" WHERE "isActive" = true';
 
   sql.query(query, (err, res) => {
     if (err) {
@@ -97,7 +97,7 @@ Publicacion.getAll = (result) => {
       return;
     }
 
-    console.log("publicacion: ", res);
+    //console.log("publicacion: ", res);
     result(null, res);
   });
 };

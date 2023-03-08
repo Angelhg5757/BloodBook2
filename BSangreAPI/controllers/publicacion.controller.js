@@ -32,8 +32,8 @@ exports.list = (req, res) => {
         message: err.message || "Error al recuperar los datos",
       });
     else {
-      console.log(`Publicacion.list $(data)`);
-      res.status(200).json(data);
+      //console.log(`Publicacion.list $(data)`);
+      res.status(200).json(data.rows);
     }
   });
 };
