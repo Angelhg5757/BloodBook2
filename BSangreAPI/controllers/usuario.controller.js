@@ -1,4 +1,7 @@
 const Usuario = require("../models/usuario.model");
+const sql = require("../models/db.js");
+const bcrypt = require("bcrypt");
+const pg = require("pg");
 
 exports.create = (req, res) => {
   if (!req.body) {
@@ -31,52 +34,41 @@ exports.create = (req, res) => {
   });
 };
 
-
-exports.list = (req, res)=>{
-    Usuario.getAll((err, data)=>{
-        if(err)
-            res.status(500).send({
-                message: err.message || "Error al recuperar los datos",
-            });
-        else{
-            console.log(`Usuario.list $(data)`);
-            res.status(200).json(data);
-        }
-    });
+exports.list = (req, res) => {
+  Usuario.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Error al recuperar los datos",
+      });
+    else {
+      console.log(`Usuario.list $(data)`);
+      res.status(200).json(data);
+    }
+  });
 };
-
-// exports.postLogin = async (req, res) => {
-//   const { email, password } = req.body;
-//   const userId = await Usuario.getUserByEmailAndPassword(email, password);
-//   if (userId) {
-//     res.json({ success: true, userId });
-//   } else {
-//     res.json({ success: false });
-//   }
-// };
 
 exports.actualizar = (req, res) => {
   Usuario.update(req, (err, data) => {
     if (err) {
       res.status(500).json({
-        message: err.message || "Error al actualizar el Usuario."
-    });
-  } else {
-    res.status(200).json(data);
-  }
-});
+        message: err.message || "Error al actualizar el Usuario.",
+      });
+    } else {
+      res.status(200).json(data);
+    }
+  });
 };
 
 exports.actualizarStatus = (req, res) => {
   Usuario.updateStatus(req, (err, data) => {
     if (err) {
       res.status(500).json({
-        message: err.message || "Error al actualizar el Usuario."
-    });
-  } else {
-    res.status(200).json(data);
-  }
-});
+        message: err.message || "Error al actualizar el Usuario.",
+      });
+    } else {
+      res.status(200).json(data);
+    }
+  });
 };
 
 // exports.actualizarStatus2 = (req, res) => {
@@ -93,9 +85,9 @@ exports.actualizarStatus = (req, res) => {
 
 exports.borrar = (req, res) => {
   Usuario.delete(req, (err, data) => {
-    if (err){
+    if (err) {
       res.status(500).json({
-        message: err.message || "Error al borrar el Usuario."
+        message: err.message || "Error al borrar el Usuario.",
       });
     } else {
       res.status(200).json(data);
@@ -103,4 +95,101 @@ exports.borrar = (req, res) => {
   });
 };
 
-    
+exports.login = async (req, res) => {
+  const correo = req.body.correo;
+  const pwd = req.body.password;
+  console.log("correo: " + correo);
+  try {
+    const usuario = await Usuario.findOne(correo);
+    if (usuario) {
+      const verified = bcrypt.compareSync(pwd, usuario.password);
+      if (verified) {
+        const idUsuario = usuario.idUsuario;
+        if (usuario.idRoles == 1) {
+          return res.status(200).send({
+            // message: "Donador", 
+            idUsuario
+          });
+        } else if (usuario.idRoles == 2) {
+          return res.status(201).send({
+            // message: "Paciente", 
+            idUsuario
+          });
+        } else if ((usuario, idRoles == 3)) {
+          return res.status(202).send({
+            // message: "Administrador", 
+            idUsuario
+          });
+        }
+      } else {
+        return res.status(404).send({
+          mensaje: "Error de validación",
+        });
+      }
+    } else {
+      return res.status(404).send({
+        mensaje: "Error de validación",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      mensaje: "Ocurrió un error al logearse",
+    });
+  }
+};
+
+// exports.login = (req, res, next) => {
+//   const email = req.body.correo;
+//   const password = req.body.password;
+
+//   try {
+//     const user = Usuario.findUserByEmail(email);
+//     if (!user) {
+//       throw new Error('Usuario no encontrado');
+//     }
+//     const match = Usuario.checkPassword(password, user.password);
+//     if (match) {
+//       res.json({ idUsuario: user.idUsuario });
+//     } else {
+//       throw new Error('Contraseña incorrecta');
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(401).send('Error de autenticación');
+//   }
+// }
+
+// exports.login = (req, res, next) =>{
+//   const email = req.body.email;
+//   const password = req.body.password;
+
+//   // Consulta SQL para recuperar el usuario con el correo electrónico proporcionado
+//   const query = {
+//     text: 'SELECT "idUsuario", "password" FROM "Usuario" WHERE "correo" = $1',
+//     values: [email],
+//   };
+
+//   sql.query(query)
+//     .then(result => {
+//       if (result.rows.length == 0) {
+//         throw new Error('Usuario no encontrado');
+//       }
+//       const user = result.rows[0];
+//       return bcrypt.compare(password, user.password); // Comparar la contraseña proporcionada con la almacenada
+//     })
+//     .then(match => {
+//       if (match) {
+//         // Las contraseñas coinciden, crear un objeto de sesión y redirigir al usuario a otra página
+//         req.session.userId = user.id; // Almacenar el id del usuario en la sesión
+//         res.redirect('/inicio');
+//       } else {
+//         // Las contraseñas no coinciden, devolver un error de autenticación
+//         throw new Error('Contraseña incorrecta');
+//       }
+//     })
+//     .catch(error => {
+//       console.error(error);
+//       res.status(401).send('Error de autenticación');
+//     });
+// }

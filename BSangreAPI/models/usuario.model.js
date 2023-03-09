@@ -64,24 +64,51 @@ Usuario.getAll = (result) => {
 Usuario.getById = (req, result) => {
   const id = req.params.id;
 
-  sql.query('SELECT * FROM "Usuario" WHERE "idUsuario" = $1', [id], (err, res) => {
-    if (err) {
-      console.log("Error: ", err);
-      result(err, null);
-      return;
+  sql.query(
+    'SELECT * FROM "Usuario" WHERE "idUsuario" = $1',
+    [id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+      console.log("Usuario: ", res);
+      result(null, res);
     }
-    console.log("Usuario: ", res);
-    result(null, res);
-  });
+  );
 };
 //Actualizar
 Usuario.update = (req, result) => {
   const id = parseInt(req.params.id);
-  const { nombre, apePat, apeMat, correo, password, fechaNac, isActive, idRoles, idSangre, sexo } = req.body;
+  const {
+    nombre,
+    apePat,
+    apeMat,
+    correo,
+    password,
+    fechaNac,
+    isActive,
+    idRoles,
+    idSangre,
+    sexo,
+  } = req.body;
 
   sql.query(
     'UPDATE "Usuario" SET "nombre" = $1, "apePat" = $2, "apeMat" = $3, "correo" = $4, "password" = $5, "fechaNac" = $6, "isActive" = $7, "idRoles" = $8, "idSangre" = $9, "sexo" = $10 WHERE "idUsuario" = $11',
-    [nombre, apePat, apeMat, correo, password, fechaNac, isActive, idRoles, idSangre, sexo, id],
+    [
+      nombre,
+      apePat,
+      apeMat,
+      correo,
+      password,
+      fechaNac,
+      isActive,
+      idRoles,
+      idSangre,
+      sexo,
+      id,
+    ],
     (err, res) => {
       if (err) {
         console.log("Error: ", err);
@@ -136,32 +163,124 @@ Usuario.updateStatus = (req, result) => {
 Usuario.delete = (req, result) => {
   const id = req.params.id;
 
-  sql.query('DELETE FROM "Usuario" WHERE "idUsuario" = $1', [id], (err, res) => {
-    if (err) {
-      console.log("Error: ", err);
-      result(err, null);
-      return;
+  sql.query(
+    'DELETE FROM "Usuario" WHERE "idUsuario" = $1',
+    [id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+      result(null, res);
     }
-    result(null, res);
-  });
+  );
 };
-//Obtener usuario por correo y password
-// Usuario.getUserByEmailAndPassword = async (req, result) => {
-//   const email = req.body.correo;
-//   const password = req.body.password;
-//   const query =
-//     'SELECT "idUsuarios" FROM "Usuarios" WHERE "correo" = $1 AND "password" = crypt($2, "password")';
-//   const values = [email, password];
-//   try {
-//     const result = await sql.query(query, values);
-//     if (result.rows.length === 1) {
-//       return result.rows[0].id;
-//     }
-//     return null;
-//   } catch (error) {
-//     console.error(error);
-//     return null;
+//Obtener usuario por correo
+Usuario.findOne = async (correo) => {
+  const query = `SELECT * FROM "Usuario" WHERE "correo" = $1`; //AND "isActive" = true
+  const values = [correo];
+  const { rows } = await sql.query(query, values);
+  return rows[0];
+};
+
+// Usuario.getUserByEmailAndPassword = (req, result) => {
+//   const correo = req.body;
+//   const password = req.body;
+//   if (correo && password) {
+//     sql.query(
+//       'SELECT "password" FROM "Usuario" WHERE "correo" = $1',
+//       [correo],
+//       (err, res) => {
+//         if (err) {
+//           throw err;
+//         }
+//         const contra = res.rows[0];
+//         bcrypt.compare(password, contra, (err, result) => {
+//           if (err) {
+//             result(err, null);
+//           } else {
+//             if (result) {
+//               const query =
+//                 'SELECT "idUsuario" FROM "Usuarios" WHERE "correo" = $1 AND "password" = $2'; //crypt($2, "password")
+//               const values = [correo, password];
+//               try {
+//                 const result = sql.query(query, values);
+//                 if (result.rows.length === 1) {
+//                   return result.rows[0].idUsuario;
+//                 }
+//                 return null;
+//               } catch (error) {
+//                 console.error(error);
+//                 return null;
+//               }
+//             } else {
+//               console.log("Las contraseñas no coinciden");
+//               // Manejar el error de autenticación
+//             }
+//           }
+//         });
+//       }
+//     );
 //   }
 // };
 
+// Usuario.getUserByEmailAndPassword = (req, result) => {
+//   const correo = req.body.correo;
+//   const password = req.body.password;
+//   if (correo && password) {
+//     sql.query(
+//       'SELECT "password" FROM "Usuario" WHERE "correo" = $1',
+//       [correo],
+//       (err, res) => {
+//         if (err) {
+//           result(err, null);
+//         } else {
+//           const contra = res.rows[0].password;
+//           bcrypt.compare(password, contra , (err, res) => {
+//             if (err) {
+//               result(err, null);
+//             } else {
+//               if (res) {
+//                 const query =
+//                   'SELECT "idUsuario" FROM "Usuario" WHERE "correo" = $1'; //crypt($2, "password")
+//                 const values = [correo];
+//                 try {
+//                   const result = sql.query(query, values);
+//                   if (result.length > 0) {
+//                     result(result.rows[0].idUsuario, null);
+//                   } else {
+//                     result(null, "Error de autenticación");
+//                   }
+//                 } catch (error) {
+//                   result(error, null);
+//                 }
+//               } else {
+//                 result(null, "Las contraseñas no coinciden");
+//               }
+//             }
+//           });
+//         }
+//       }
+//     );
+//   }
+// };
+// Usuario.findUserByEmail = (email) => {
+//   return new Promise((resolve, reject) => {
+//     sql.query('SELECT "password" FROM "Usuario" WHERE "correo" = $1', [email], (error, results) => {
+//       if (error) {
+//         reject(error);
+//       } else {
+//         resolve(results.rows);
+//       }
+//     });
+//   });
+// }
+
+// Usuario.checkPassword = (password, hash) => {
+//   return bcrypt.compare(password, hash);
+// }
+
+
 module.exports = Usuario;
+

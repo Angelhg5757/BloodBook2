@@ -22,7 +22,7 @@ module.exports = (app) => {
     router.put("/usuario/actualizarStatus/:id", usuario.actualizarStatus);
     router.delete("/usuario/eliminar/:id", usuario.borrar);
 
-    //router.post("/usuario/log", usuario.postLogin);
+    router.post("/usuario/log", usuario.login);
 
     //Rutas de publicacion
     router.get("/publicacion/listar", publicacion.list);
