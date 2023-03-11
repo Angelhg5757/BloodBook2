@@ -1,80 +1,6 @@
 // const { DataTypes } = require('sequelize');
 // const sequelize = require('../models/db');
 
-// module.exports = (sequelize, Sequelize) => {
-//   const Publicaciones = sequelize.define("Publicaciones", {
-//       // idPublicaciones: {
-//       //   type: Sequelize.INTEGER,
-//       //   primaryKey: true,
-//       //   autoIncrement: true
-//       // },
-//       fechaPublicacion: {
-//         type: Sequelize.DATEONLY,
-//         primaryKey: true,
-//         allowNull: false
-//       },
-//       titulo: {
-//         type: Sequelize.STRING,
-//         allowNull: false
-//       },
-//       descripcion: {
-//         type: Sequelize.STRING,
-//         allowNull: false
-//       },
-//       isActive: {
-//         type: Sequelize.BOOLEAN,
-//         allowNull: false,
-//         defaultValue: true
-//       },
-//       idImagen: {
-//         type: Sequelize.INTEGER,
-//       },
-//       idUsuario: {
-//         type: Sequelize.INTEGER,
-//       }
-//   });
-
-//   return Publicaciones;
-// };
-
-// module.exports = (sequelize, Sequelize) => {
-//   const Publicacion = sequelize.define("Publicaciones", {
-//     idPublicaciones: {
-//       type: DataTypes.INTEGER,
-//       primaryKey: true,
-//       autoIncrement: true
-//     },
-//     fechaPublicacion: {
-//       type: DataTypes.DATEONLY,
-//       primaryKey: true,
-//       allowNull: false
-//     },
-//     titulo: {
-//       type: DataTypes.STRING,
-//       allowNull: false
-//     },
-//     descripcion: {
-//       type: DataTypes.STRING,
-//       allowNull: false
-//     },
-//     isActive: {
-//       type: DataTypes.BOOLEAN,
-//       allowNull: false,
-//       defaultValue: true
-//     },
-//     idImagen: {
-//       type: DataTypes.INTEGER,
-//       allowNull: true
-//     },
-//     idUsuario: {
-//       type: DataTypes.INTEGER,
-//       allowNull: false
-//     }
-//   })
-//   return Publicacion;
-// };
-
-
 const sql = require("./db.js");
 //constructor
 const Publicacion = function (publicacion) {
@@ -88,7 +14,8 @@ const Publicacion = function (publicacion) {
 };
 //Listar Publicaciones
 Publicacion.getAll = (result) => {
-  let query = 'SELECT * FROM "Publicaciones" WHERE "isActive" = true';
+  let query = 'SELECT "Usuario".*, "Publicaciones".*, "TipoSangre".tipo, "Contacto".* FROM "Usuario" INNER JOIN "Publicaciones" ON "Publicaciones"."idUsuario" = "Usuario"."idUsuario" \
+   INNER JOIN "TipoSangre" ON "TipoSangre"."idSangre" = "Usuario"."idSangre" INNER JOIN "Contacto" ON "Contacto"."idUsuario" = "Usuario"."idUsuario" WHERE "Publicaciones"."isActive" = TRUE'; // SELECT * FROM "Usuario" INNER JOIN "Publicaciones" ON "Publicaciones"."idUsuario" = "Usuario"."idUsuario" WHERE "Publicaciones"."isActive" = TRUE'
 
   sql.query(query, (err, res) => {
     if (err) {
@@ -96,8 +23,6 @@ Publicacion.getAll = (result) => {
       result(err, null);
       return;
     }
-
-    //console.log("publicacion: ", res);
     result(null, res);
   });
 };

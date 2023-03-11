@@ -73,7 +73,6 @@ Usuario.getById = (req, result) => {
         result(err, null);
         return;
       }
-      console.log("Usuario: ", res);
       result(null, res);
     }
   );
@@ -178,7 +177,8 @@ Usuario.delete = (req, result) => {
 };
 //Obtener usuario por correo
 Usuario.findOne = async (correo) => {
-  const query = `SELECT * FROM "Usuario" WHERE "correo" = $1`; //AND "isActive" = true
+  const query = `SELECT "Usuario".*, "TipoSangre"."tipo" FROM "Usuario" INNER JOIN "TipoSangre" ON "TipoSangre"."idSangre" = "Usuario"."idSangre" WHERE "Usuario"."correo" = $1 \ 
+  AND "TipoSangre"."idSangre" = "Usuario"."idSangre"`; //AND "isActive" = true
   const values = [correo];
   const { rows } = await sql.query(query, values);
   return rows[0];
@@ -224,63 +224,6 @@ Usuario.findOne = async (correo) => {
 //     );
 //   }
 // };
-
-// Usuario.getUserByEmailAndPassword = (req, result) => {
-//   const correo = req.body.correo;
-//   const password = req.body.password;
-//   if (correo && password) {
-//     sql.query(
-//       'SELECT "password" FROM "Usuario" WHERE "correo" = $1',
-//       [correo],
-//       (err, res) => {
-//         if (err) {
-//           result(err, null);
-//         } else {
-//           const contra = res.rows[0].password;
-//           bcrypt.compare(password, contra , (err, res) => {
-//             if (err) {
-//               result(err, null);
-//             } else {
-//               if (res) {
-//                 const query =
-//                   'SELECT "idUsuario" FROM "Usuario" WHERE "correo" = $1'; //crypt($2, "password")
-//                 const values = [correo];
-//                 try {
-//                   const result = sql.query(query, values);
-//                   if (result.length > 0) {
-//                     result(result.rows[0].idUsuario, null);
-//                   } else {
-//                     result(null, "Error de autenticación");
-//                   }
-//                 } catch (error) {
-//                   result(error, null);
-//                 }
-//               } else {
-//                 result(null, "Las contraseñas no coinciden");
-//               }
-//             }
-//           });
-//         }
-//       }
-//     );
-//   }
-// };
-// Usuario.findUserByEmail = (email) => {
-//   return new Promise((resolve, reject) => {
-//     sql.query('SELECT "password" FROM "Usuario" WHERE "correo" = $1', [email], (error, results) => {
-//       if (error) {
-//         reject(error);
-//       } else {
-//         resolve(results.rows);
-//       }
-//     });
-//   });
-// }
-
-// Usuario.checkPassword = (password, hash) => {
-//   return bcrypt.compare(password, hash);
-// }
-
 
 module.exports = Usuario;
 

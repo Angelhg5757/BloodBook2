@@ -18,6 +18,7 @@ module.exports = (app) => {
 
     //Rutas de usuario
     router.get("/usuario/listar", usuario.list);
+    router.get("/usuario/listar/:id", usuario.listID);
     router.post("/usuario/crear", usuario.create);
     router.put("/usuario/actualizarStatus/:id", usuario.actualizarStatus);
     router.delete("/usuario/eliminar/:id", usuario.borrar);

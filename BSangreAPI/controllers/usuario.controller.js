@@ -41,8 +41,21 @@ exports.list = (req, res) => {
         message: err.message || "Error al recuperar los datos",
       });
     else {
-      console.log(`Usuario.list $(data)`);
-      res.status(200).json(data);
+      //console.log(`Usuario.list $(data)`);
+      res.status(200).json(data.rows);
+    }
+  });
+};
+
+exports.listID = (req, res) => {
+  Usuario.getById(req, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Error al recuperar los datos",
+      });
+    else {
+      //console.log(`Usuario.list $(data)`);
+      res.status(200).json(data.rows);
     }
   });
 };
@@ -105,20 +118,27 @@ exports.login = async (req, res) => {
       const verified = bcrypt.compareSync(pwd, usuario.password);
       if (verified) {
         const idUsuario = usuario.idUsuario;
+        const nombre = usuario.nombre;
+        const apePat = usuario.apePat;
+        const apeMat = usuario.apeMat;
+        const correo = usuario.correo;
+        const fechaNac = usuario.fechaNac;
+        const sangre = usuario.tipo;
         if (usuario.idRoles == 1) {
           return res.status(200).send({
             // message: "Donador", 
-            idUsuario
+            idUsuario, nombre, apePat, apeMat, correo, fechaNac, sangre
+            
           });
         } else if (usuario.idRoles == 2) {
           return res.status(201).send({
             // message: "Paciente", 
-            idUsuario
+            idUsuario, nombre, apePat, apeMat, correo, fechaNac, sangre
           });
         } else if ((usuario, idRoles == 3)) {
           return res.status(202).send({
             // message: "Administrador", 
-            idUsuario
+            idUsuario, nombre, apePat, apeMat, correo, fechaNac, sangre
           });
         }
       } else {
@@ -138,58 +158,3 @@ exports.login = async (req, res) => {
     });
   }
 };
-
-// exports.login = (req, res, next) => {
-//   const email = req.body.correo;
-//   const password = req.body.password;
-
-//   try {
-//     const user = Usuario.findUserByEmail(email);
-//     if (!user) {
-//       throw new Error('Usuario no encontrado');
-//     }
-//     const match = Usuario.checkPassword(password, user.password);
-//     if (match) {
-//       res.json({ idUsuario: user.idUsuario });
-//     } else {
-//       throw new Error('Contraseña incorrecta');
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(401).send('Error de autenticación');
-//   }
-// }
-
-// exports.login = (req, res, next) =>{
-//   const email = req.body.email;
-//   const password = req.body.password;
-
-//   // Consulta SQL para recuperar el usuario con el correo electrónico proporcionado
-//   const query = {
-//     text: 'SELECT "idUsuario", "password" FROM "Usuario" WHERE "correo" = $1',
-//     values: [email],
-//   };
-
-//   sql.query(query)
-//     .then(result => {
-//       if (result.rows.length == 0) {
-//         throw new Error('Usuario no encontrado');
-//       }
-//       const user = result.rows[0];
-//       return bcrypt.compare(password, user.password); // Comparar la contraseña proporcionada con la almacenada
-//     })
-//     .then(match => {
-//       if (match) {
-//         // Las contraseñas coinciden, crear un objeto de sesión y redirigir al usuario a otra página
-//         req.session.userId = user.id; // Almacenar el id del usuario en la sesión
-//         res.redirect('/inicio');
-//       } else {
-//         // Las contraseñas no coinciden, devolver un error de autenticación
-//         throw new Error('Contraseña incorrecta');
-//       }
-//     })
-//     .catch(error => {
-//       console.error(error);
-//       res.status(401).send('Error de autenticación');
-//     });
-// }
