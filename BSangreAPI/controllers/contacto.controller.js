@@ -12,6 +12,18 @@ exports.listar = (req, res) => {
     }
   });
 };
+exports.listIDUser = (req, res) => {
+  Contacto.getByIdUser(req, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Error al recuperar los datos",
+      });
+    else {
+      res.status(200).json(data.rows);
+    }
+  });
+};
+
 //crear
 exports.create = (req, res) => {
   if (!req.body) {

@@ -39,6 +39,23 @@ Contacto.getAll = (result) => {
   });
 };
 
+Contacto.getByIdUser = (req, result) => {
+  const id = req.params.id;
+
+  sql.query(
+    'SELECT * FROM "Contacto" WHERE "idUsuario" = $1',
+    [id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+      result(null, res);
+    }
+  );
+};
+
 //Eliminar 
 Contacto.delete = (req, result) => {
   const id = req.params.idContacto;

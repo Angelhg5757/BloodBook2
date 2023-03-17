@@ -65,6 +65,7 @@ module.exports = (app) => {
     router.delete("/redesH/eliminar/:id", redesHU.borrar);
 
     router.get("/contacto/listar", contacto.listar);
+    router.get("/contacto/listarUser/:id", contacto.listIDUser);
     router.post("/contacto/crear", contacto.create);
     router.put("/contacto/actualizar/:id", contacto.actualizar);
     router.delete("/contacto/eliminar/:idContacto", contacto.eliminar);
