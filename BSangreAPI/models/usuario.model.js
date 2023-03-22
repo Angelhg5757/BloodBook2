@@ -15,33 +15,78 @@ const Usuario = function (usuario) {
   this.sexo = usuario.sexo;
 };
 //Crear
-Usuario.create = (usuario, result) => {
-  const text =
-    'INSERT INTO "Usuario" ("nombre", "apePat", "apeMat", "correo", "password", "fechaNac", \
-  "isActive", "idRoles", "idSangre", "sexo") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
-  const hashedPassword = bcrypt.hashSync(usuario.password, 10);
-  const active = true;
+// Usuario.create = (usuario, result) => {
+//   const text =
+//     'INSERT INTO "Usuario" ("nombre", "apePat", "apeMat", "correo", "password", "fechaNac", \
+//   "isActive", "idRoles", "idSangre", "sexo") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
+//   const hashedPassword = bcrypt.hashSync(usuario.password, 10);
+//   const active = true;
 
-  const values = [
-    usuario.nombre,
-    usuario.apePat,
-    usuario.apeMat,
-    usuario.correo,
-    hashedPassword,
-    usuario.fechaNac,
-    active,
-    usuario.idRoles,
-    usuario.idSangre,
-    usuario.sexo,
-  ];
-  sql.query(text, values, (err, res) => {
+//   const values = [
+//     usuario.nombre,
+//     usuario.apePat,
+//     usuario.apeMat,
+//     usuario.correo,
+//     hashedPassword,
+//     usuario.fechaNac,
+//     active,
+//     usuario.idRoles,
+//     usuario.idSangre,
+//     usuario.sexo,
+//   ];
+//   sql.query(text, values, (err, res) => {
+//     if (err) {
+//       console.log("Error al crear el usuario: ", err);
+//       result(err, null);
+//       return;
+//     }
+//     console.log("Usuario guardado!", res);
+//     result(null, res);
+//   });
+// };
+Usuario.create = (usuario, result) => {
+  const checkExistingEmailQuery = 'SELECT COUNT(*) as count FROM "Usuario" WHERE correo = $1';
+  const values = [usuario.correo];
+
+  // Verificar si el correo ya existe en la base de datos
+  sql.query(checkExistingEmailQuery, values, (err, res) => {
     if (err) {
-      console.log("Error al crear el usuario: ", err);
+      console.log("Error al verificar el correo existente: ", err);
       result(err, null);
       return;
     }
-    console.log("Usuario guardado!", res);
-    result(null, res);
+    const count = res.rows[0].count;
+    if (count > 0) {
+      console.log("El correo electrónico ya está registrado.");
+      result("El correo electrónico ya está registrado.", null);
+      return;
+    }
+    // Si el correo no existe, procedemos a crear el nuevo usuario
+    const insertUserQuery = 'INSERT INTO "Usuario" ("nombre", "apePat", "apeMat", "correo", "password", "fechaNac", "isActive", "idRoles", "idSangre", "sexo") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
+    const hashedPassword = bcrypt.hashSync(usuario.password, 10);
+    const active = true;
+
+    const insertUserValues = [
+      usuario.nombre,
+      usuario.apePat,
+      usuario.apeMat,
+      usuario.correo,
+      hashedPassword,
+      usuario.fechaNac,
+      active,
+      usuario.idRoles,
+      usuario.idSangre,
+      usuario.sexo,
+    ];
+    sql.query(insertUserQuery, insertUserValues, (err, res) => {
+      if (err) {
+        console.log("Error al crear el usuario: ", err);
+        result(err, null);
+        return;
+      }
+      console.log("Usuario guardado!", res);
+      result(null, res);
+    });
   });
 };
 
